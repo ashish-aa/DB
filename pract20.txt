@@ -1,0 +1,93 @@
+db.students.insertMany([
+  { Rollno: 1, name: 'Navin', subject: 'DMSA', marks: 78 },
+  { Rollno: 2, name: 'Anusha', subject: 'OSD', marks: 75 },
+  { Rollno: 3, name: 'Ravi', subject: 'TOC', marks: 69 },
+  { Rollno: 4, name: 'Veena', subject: 'TOC', marks: 70 },
+  { Rollno: 5, name: 'Pravini', subject: 'OSD', marks: 80 },
+  { Rollno: 6, name: 'Reena', subject: 'DMSA', marks: 50 },
+  { Rollno: 7, name: 'Geeta', subject: 'CN', marks: 90 },
+  { Rollno: 8, name: 'Akash', subject: 'CN', marks: 85 }
+])
+Create Single Index:
+javascript
+Copy code
+db.students.createIndex({ subject: 1 })
+Create Compound Index:
+javascript
+Copy code
+db.students.createIndex({ subject: 1, marks: 1 })
+Create Unique Index on Collection:
+javascript
+Copy code
+db.students.createIndex({ Rollno: 1 }, { unique: true })
+Show Index Information:
+javascript
+Copy code
+db.students.getIndexes()
+Remove Index:
+javascript
+Copy code
+db.students.dropIndex({ subject: 1 })
+Aggregation
+Find Max Marks of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", maxMarks: { $max: "$marks" } } }
+])
+Find Min Marks of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", minMarks: { $min: "$marks" } } }
+])
+Find Sum of Marks of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", totalMarks: { $sum: "$marks" } } }
+])
+Find Avg Marks of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", avgMarks: { $avg: "$marks" } } }
+])
+Find First Record of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $sort: { subject: 1, Rollno: 1 } },
+  {
+    $group: {
+      _id: "$subject",
+      firstRecord: { $first: "$$ROOT" }
+    }
+  }
+])
+Find Last Record of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $sort: { subject: 1, Rollno: -1 } },
+  {
+    $group: {
+      _id: "$subject",
+      lastRecord: { $first: "$$ROOT" }
+    }
+  }
+])
+Find Count Number of Records of Each Subject:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", count: { $sum: 1 } } }
+])
+Find Count Number of Records of Each Subject with $count:
+javascript
+Copy code
+db.students.aggregate([
+  { $group: { _id: "$subject", count: { $sum: 1 } } },
+  { $count: "totalSubjects" }
+])
+These

@@ -1,0 +1,43 @@
+db.orderinfo.updateMany({}, { $set: { Age: 30 } });
+
+
+db.orderinfo.createIndex({ cust_id: 1, status: 1 });
+
+
+db.orderinfo.aggregate([
+  {
+    $group: {
+      _id: { cust_id: "$cust_id", status: "$status" },
+      uniqueIds: { $addToSet: "$_id" },
+      count: { $sum: 1 },
+    },
+  },
+  {
+    $match: {
+      count: { $gt: 1 },
+    },
+  },
+]).forEach(function (doc) {
+  doc.uniqueIds.shift(); // Keep the first document and remove the rest
+  db.orderinfo.remove({ _id: { $in: doc.uniqueIds } });
+});
+
+
+
+db.orderinfo.aggregate([
+  {
+    $group: {
+      _id: { cust_id: "$cust_id", status: "$status" },
+      avgPrice: { $avg: "$price" },
+    },
+  },
+]).forEach(function (doc) {
+  print("Customer ID: " + doc._id.cust_id + ", Status: " + doc._id.status + ", Average Price: " + doc.avgPrice);
+});
+
+
+
+
+
+
+db.orderinfo.updateMany({ status: "B" }, { $set: { cust_name: "NewName" } });

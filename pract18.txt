@@ -1,0 +1,79 @@
+// Map function to emit state and population
+var mapFunction = function() {
+    emit(this.state, parseInt(this.population));
+};
+
+// Reduce function to sum the populations for each state
+var reduceFunction = function(state, populations) {
+    return Array.sum(populations);
+};
+
+// Run the map-reduce operation on the "City" collection
+var result = db.City.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: { inline: 1 },
+        query: { population: { $exists: true } } // Filter out documents without population data
+    }
+);
+
+// Print the results
+result.results.forEach(function(statePopulation) {
+    print("State: " + statePopulation._id + ", Total Population: " + statePopulation.value);
+});
+
+
+// Map function to emit city and population
+var mapFunction = function() {
+    emit(this.city, parseInt(this.population));
+};
+
+// Reduce function to sum the populations for each city
+var reduceFunction = function(city, populations) {
+    return Array.sum(populations);
+};
+
+// Run the map-reduce operation on the "City" collection
+var result = db.City.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: { inline: 1 },
+        query: { population: { $exists: true } } // Filter out documents without population data
+    }
+);
+
+// Print the results
+result.results.forEach(function(cityPopulation) {
+    print("City: " + cityPopulation._id + ", Total Population: " + cityPopulation.value);
+});
+
+
+
+// Map function to emit type and population
+var mapFunction = function() {
+    emit(this.type, parseInt(this.population));
+};
+
+// Reduce function to sum the populations for each type
+var reduceFunction = function(type, populations) {
+    return Array.sum(populations);
+};
+
+// Run the map-reduce operation on the "City" collection
+var result = db.City.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: { inline: 1 },
+        query: { population: { $exists: true } } // Filter out documents without population data
+    }
+);
+
+// Print the results
+result.results.forEach(function(typePopulation) {
+    print("Type: " + typePopulation._id + ", Total Population: " + typePopulation.value);
+});
+
+

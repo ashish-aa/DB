@@ -1,0 +1,54 @@
+use department
+db.teacher.insertMany([
+  { name: "Teacher1", department: "Math", experience: 5, salary: 60000 },
+  { name: "Teacher2", department: "Math", experience: 8, salary: 75000 },
+  { name: "Teacher3", department: "Science", experience: 7, salary: 70000 },
+  { name: "Teacher4", department: "Science", experience: 6, salary: 65000 }
+  // Insert more sample documents
+])
+Display the Department-wise Average Salary using Aggregation:
+
+javascript
+Copy code
+db.teacher.aggregate([
+  {
+    $group: {
+      _id: "$department",
+      averageSalary: { $avg: "$salary" }
+    }
+  }
+])
+Display the Number of Employees Working in Each Department:
+
+javascript
+Copy code
+db.teacher.aggregate([
+  {
+    $group: {
+      _id: "$department",
+      count: { $sum: 1 }
+    }
+  }
+])
+Display the Department-wise Minimum Salary:
+
+javascript
+Copy code
+db.teacher.aggregate([
+  {
+    $group: {
+      _id: "$department",
+      minSalary: { $min: "$salary" }
+    }
+  }
+])
+Apply an Index (for example, on the "department" field):
+
+javascript
+Copy code
+db.teacher.createIndex({ department: 1 })
+Drop the Index (if needed):
+
+javascript
+Copy code
+db.teacher.dropIndex("department_1")
